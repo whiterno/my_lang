@@ -1,18 +1,38 @@
 Programm        ::= Statement Programm | Statement ;
-Statement       ::= Assignment | IfStatement | WhileStatement | FuncStatement;
+Statement       ::= FuncDeclaration | VarDeclaration | Assignment | FuncCall ";" | IfStatement | WhileStatement |
+                    In ";" | Out ;
 
-Assignment      ::= "double" Identifier [ "=" Expression ] ";" ;
+VarDeclaration  ::= Declaration Identifier [ "=" Expression | In ] ";"
 
-IfStatement     ::= "if" "(" Expression ")" "{" Programm "}" ;
+Assignment      ::= Identifier "=" Expression ";" ;
 
-WhileStatement  ::= "while" "(" Expression ")" "{" Programm "}" ;
+IfStatement     ::= If "(" Expression ")" "{" { Statement } "}" ;
 
-FuncStatement   ::= "double" Identifier "(" Parameters ")" "{" Programm "}" ;
-Parameters      ::= ["double" Identifier "," [ Parameters ] ] ;
+WhileStatement  ::= While "(" Expression ")" "{" { Statement | Break | Continue } "}" ;
 
-Expression      ::= MultDiv + Expression | MultDiv - Expression | MultDiv ;
-MultDiv         ::= MultDiv * Value | MultDiv / Value | Value ;
-Value           ::= "(" Expression ")"  | Identifier | Number ;
+FuncDeclaration ::= Declaration Identifier "(" Parameters ")" "{" { Statement | Return } "}" ;
+Parameters      ::= [Declaration Identifier {"," Parameters } ] ;
+
+FuncCall        ::= Identifier "(" [Arguments] ")" ;
+Arguments       ::= [ Identifier { "," Arguments } ] ;
+
+If              ::= "if" ;
+While           ::= "while" ;
+Declaration     ::= "double" ;
+Break           ::= "break" ";" ;
+Continue        ::= "continue" ";" ;
+In              ::= "input()" ;
+Out             ::= "print" "(" Expression ")" ";" ;
+Return          ::= "return" Expression ";" ;
+
+Expression      ::= Priority5
+
+Priority5       ::= Priority4 { ( "and" | "or" ) Priority5 } ;
+Priority4       ::= Priority3 { ( "==" | "!=" | ">=" | "<=" | ">" | "<") Priority4} ;
+Priority3       ::= Priority2 { ( "+" | "-" ) Priority3 } ;
+Priority2       ::= Priority1 { ( "*" | "/" ) Priority2 } ;
+Priority1       ::= "sin" "(" Priority5 ")" | "cos" "(" Priority5 ")" | "sqrt" "(" Priority5 ")" | Value ;
+Value           ::= "(" Priority5 ")" | Number | FuncCall | Identifier ;
 
 Identifier      ::= Character { Character | Digit } ;
 Number          ::= [ "-" ] Digit { Digit } [ "." { Digit } ] ;

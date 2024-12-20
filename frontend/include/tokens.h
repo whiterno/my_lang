@@ -1,19 +1,27 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-#include ""
+#include "syntax_tree.h"
 
-enum TokenType{
-    CONSTANT            = 1,
-    IDENTIFIER          = 2,
-    KEYWORD             = 3,
-    FUNCTION_DEFINITION = 4,
-    PARAMETERS          = 5,
-    VAR_DECLARATION     = 6,
-    CALL                = 7,
-    SEPARATOR           = 8,
+namespace Tkn{
+    enum TokenType{
+        CONSTANT            = 1,
+        IDENTIFIER          = 2,
+        KEYWORD             = 3,
+    };
+}
+
+typedef NodeValue TokenValue;
+
+struct Token{
+    Tkn::TokenType      token_type;
+    TokenValue          value;
+    size_t              line;
+    char*               lexem_pos;
+
+    Token*              next;
 };
 
-struct
+Token* createToken(Tkn::TokenType type, TokenValue value, size_t line, char* lexem_pos);
 
 #endif
