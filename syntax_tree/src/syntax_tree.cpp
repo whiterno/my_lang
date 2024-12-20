@@ -25,6 +25,21 @@ Node* createNode(Node* left, Node* right, NodeType node_type, NodeValue value) {
     return node;
 }
 
+Identifier createIdentifier(const char value[]){
+    Identifier id = {};
+
+    id.length = strlen(value);
+
+    char* ptr = (char*)calloc(id.length, sizeof(char));
+    for (size_t i = 0; i < id.length; i++){
+        *(ptr + i) = value[i];
+    }
+
+    id.id = ptr;
+
+    return id;
+}
+
 static Node* createNodeIn(Node* left, Node* right, NodeType data_type){
     Node* new_node = (Node*)calloc(1, sizeof(Node));
 

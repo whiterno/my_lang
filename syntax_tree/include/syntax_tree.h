@@ -22,6 +22,7 @@ enum Keyword{
     IF          = 11,
     WHILE       = 12,
     ASSIGN      = 13,
+    DECLARATION = 14,
 
     SIN         = 21,
     COS         = 22,
@@ -30,8 +31,7 @@ enum Keyword{
     SUB         = 25,
     MULT        = 26,
     DIV         = 27,
-    DIFF        = 28,
-    SQRT        = 29,
+    SQRT        = 28,
 
     EQUAL       = 31,
     LESS        = 32,
@@ -45,6 +45,10 @@ enum Keyword{
 
     SEMICOLON   = 41,
     COMMA       = 42,
+    BRACKET_CL  = 43,
+    BRACKET_OP  = 44,
+    BRACE_CL    = 45,
+    BRACE_OP    = 46,
 
     NUMBER      = 51,
 
@@ -96,6 +100,7 @@ enum ErrorsSyntaxTree{
 
 int syntaxTreeCtor(SyntaxTree** tree INIT_ARGS_BET);
 Node* createNode(Node* left, Node* right, NodeType data_type, NodeValue value);
+Identifier createIdentifier(const char value[]);
 int countNodes(Node* node, int* amount);
 int syntaxTreeDtor(SyntaxTree** tree);
 int nodesDtor(Node* node);

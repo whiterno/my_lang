@@ -109,7 +109,7 @@ static int printLabelColor(FILE* dump_dot, Node* node){
         }
         case(IDENTIFIER):{
             fprintf(dump_dot, "fillcolor = \"#FFFFE0\" ");
-            fprintf(dump_dot, "label = \"{%c ", node->value.name.id);
+            fprintf(dump_dot, "label = \"{%s ", node->value.name.id);
             return NO_ERROR;
         }
         case(CONSTANT):{
