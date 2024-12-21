@@ -6,7 +6,7 @@
 #include "../include/syntax_tree.h"
 
 static Node* createNodeIn(Node* left, Node* right, NodeType data_type);
-static void printNode(Node* node);
+static void printNode(Node* node, FILE* fp);
 
 int syntaxTreeCtor(SyntaxTree** tree INIT_ARGS_BET){
     assert(tree);
@@ -101,29 +101,29 @@ Node* makeParents(Node* root, Node* parent){
     return root;
 }
 
-void printTreePrefix(Node* node){
+void printTreePrefix(Node* node, FILE* fp){
     if (!node){
-        printf("_ ");
+        fprintf(fp, "_ ");
         return;
     }
 
-    printf("( ");
-    printNode(node);
+    fprintf(fp, "( ");
+    printNode(node, fp);
 
-    printTreePrefix(node->left);
-    printTreePrefix(node->right);
+    printTreePrefix(node->left, fp);
+    printTreePrefix(node->right, fp);
 
-    printf(") ");
+    fprintf(fp, ") ");
 }
 
-static void printNode(Node* node){
+static void printNode(Node* node, FILE* fp){
     switch(node->type){
-        case(CONSTANT):             printf("1 %d ", node->value.number); break;
-        case(IDENTIFIER):           printf("2 %ld ", node->value.index); break;
-        case(KEYWORD):              printf("3 %d ", node->value.keyword_type); break;
-        case(FUNCTION_DEFINITION):  printf("4 %ld ", node->value.index); break;
-        case(PARAMETERS):           printf("5 "); break;
-        case(VAR_DECLARATION):      printf("6 %ld ", node->value.index); break;
-        case(CALL):                 printf("7 "); break;
+        case(CONSTANT):             fprintf(fp, "1 %d ", node->value.number); break;
+        case(IDENTIFIER):           fprintf(fp, "2 %ld ", node->value.index); break;
+        case(KEYWORD):              fprintf(fp, "3 %d ", node->value.keyword_type); break;
+        case(FUNCTION_DEFINITION):  fprintf(fp, "4 %ld ", node->value.index); break;
+        case(PARAMETERS):           fprintf(fp, "5 "); break;
+        case(VAR_DECLARATION):      fprintf(fp, "6 %ld ", node->value.index); break;
+        case(CALL):                 fprintf(fp, "7 "); break;
     }
 }

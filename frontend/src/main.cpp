@@ -12,11 +12,9 @@ int main(){
 
     tree->root = parsing("test1.lan");
 
-    printf("Fucking dump\n");
-
-    printTreePrefix(tree->root);
-
-    printf("Here\n");
+    FILE* fp = fopen("tree.txt", "w");
+    printTreePrefix(tree->root, fp);
+    fclose(fp);
 
     syntaxTreeDump(DUMP_BET(tree), 0);
 
