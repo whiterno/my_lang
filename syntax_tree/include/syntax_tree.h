@@ -107,5 +107,7 @@ Identifier createIdentifier(const char value[]);
 int countNodes(Node* node, int* amount);
 int syntaxTreeDtor(SyntaxTree** tree);
 int nodesDtor(Node* node);
+Node* makeParents(Node* root, Node* parent);
+void printTreePrefix(Node* node);
 
 #endif

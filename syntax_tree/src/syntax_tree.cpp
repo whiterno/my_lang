@@ -6,6 +6,7 @@
 #include "../include/syntax_tree.h"
 
 static Node* createNodeIn(Node* left, Node* right, NodeType data_type);
+static void printNode(Node* node);
 
 int syntaxTreeCtor(SyntaxTree** tree INIT_ARGS_BET){
     assert(tree);
@@ -87,4 +88,42 @@ int nodesDtor(Node* node){
     free(node);
 
     return NO_ERROR;
+}
+
+Node* makeParents(Node* root, Node* parent){
+    if (root == NULL) return root;
+
+    root->parent = parent;
+
+    makeParents(root->left, root);
+    makeParents(root->right, root);
+
+    return root;
+}
+
+void printTreePrefix(Node* node){
+    if (!node){
+        printf("_ ");
+        return;
+    }
+
+    printf("( ");
+    printNode(node);
+
+    printTreePrefix(node->left);
+    printTreePrefix(node->right);
+
+    printf(") ");
+}
+
+static void printNode(Node* node){
+    switch(node->type){
+        case(CONSTANT):             printf("1 %d ", node->value.number); break;
+        case(IDENTIFIER):           printf("2 %ld ", node->value.index); break;
+        case(KEYWORD):              printf("3 %d ", node->value.keyword_type); break;
+        case(FUNCTION_DEFINITION):  printf("4 %ld ", node->value.index); break;
+        case(PARAMETERS):           printf("5 "); break;
+        case(VAR_DECLARATION):      printf("6 %ld ", node->value.index); break;
+        case(CALL):                 printf("7 "); break;
+    }
 }

@@ -28,5 +28,6 @@ const char OUT_STR[]            = "print";
 
 Token* lexer(const char* filename);
 void printTokens(Token* head);
+void printToken(Token* token);
 
 #endif

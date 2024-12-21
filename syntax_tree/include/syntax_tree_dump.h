@@ -24,6 +24,15 @@ struct TreeDumpAttributes{
 
 };
 
+const char WHILE_STR[]          = "while";
+const char IF_STR[]             = "if";
+const char DECLARATION_STR[]    = "int";
+const char BREAK_STR[]          = "break";
+const char CONTINUE_STR[]       = "continue";
+const char RETURN_STR[]         = "return";
+const char IN_STR[]             = "input";
+const char OUT_STR[]            = "print";
+
 int syntaxTreeDump(SyntaxTree* tree, const char filename[], const char funcname[], const size_t line, int error);
 
 #endif

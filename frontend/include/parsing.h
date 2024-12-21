@@ -1,6 +1,8 @@
 #ifndef PARSING_H
 #define PARSING_H
 
+#include "syntax_tree.h"
+
 #define DUMMY                       (NodeValue){.number = 0}
 
 #define _T                          (*tokens)
@@ -20,12 +22,14 @@
                                                _TYPE_T(_NT) == TokenType::IDENTIFIER &&                                            \
                                                _TYPE_T(_NNT) == TokenType::KEYWORD && _KWD_T(_NNT) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_VAR_DECL_TEMP(...)        if (! (_KWD_T(_T) == DECLARATION && _TYPE_T(_NT) == TokenType::IDENTIFIER)) __VA_ARGS__;
-#define _CHECK_FUNCCALL(...)
+#define _CHECK_FUNCCALL_TEMP(...)        if (! (_TYPE_T(_T) == TokenType::IDENTIFIER && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
+#define _CHECK_ASIGN_TEMP(...)           if (! (_TYPE_T(_T) == TokenType::IDENTIFIER && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == ASSIGN)) __VA_ARGS__;
+#define _CHECK_IF_TEMP(...)              if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == IF && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_SEMICOLON(...)            if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == SEMICOLON)) __VA_ARGS__;
-#define _CHECK_OPEN_BRACKET(...)         if (!(_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_OP)) __VA_ARGS__;
-#define _CHECK_CLOSE_BRACKET(...)        if (!(_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL)) __VA_ARGS__;
-#define _CHECK_OPEN_BRACE(...)           if (!(_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACE_OP)) __VA_ARGS__;
-#define _CHECK_CLOSE_BRACE(...)          if (!(_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACE_CL)) __VA_ARGS__;
+#define _CHECK_OPEN_BRACKET(...)         if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_OP)) __VA_ARGS__;
+#define _CHECK_CLOSE_BRACKET(...)        if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL)) __VA_ARGS__;
+#define _CHECK_OPEN_BRACE(...)           if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACE_OP)) __VA_ARGS__;
+#define _CHECK_CLOSE_BRACE(...)          if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACE_CL)) __VA_ARGS__;
 
 #define _CONST(token)               createNode(NULL, NULL, CONSTANT, (NodeValue){.number = token->value.number})
 #define _IDENT_N(token)             createNode(NULL, NULL, IDENTIFIER, (NodeValue){.index = getIndex(nt, _IDENT_T(token))})
@@ -36,10 +40,10 @@
 #define _SEMICOLON(statement)       createNode(statement, getProgramm(tokens, nt), KEYWORD, (NodeValue){.keyword_type = SEMICOLON})
 
 #define _PRIORITY0_FUNC(func)       *tokens = _NT;                                                              \
-                                    _CHECK_OPEN_BRACKET(syntaxError(EXPRESSION_NOT_FULL));                      \
+                                    _CHECK_OPEN_BRACKET(syntaxError(EXPRESSION_NOT_FULL, _LINE(_T)));           \
                                     *tokens = _NT;                                                              \
                                     Node* ret = _##func(getPriority5(tokens, nt));                              \
-                                    _CHECK_CLOSE_BRACKET(syntaxError(EXPRESSION_NOT_FULL));                     \
+                                    _CHECK_CLOSE_BRACKET(syntaxError(EXPRESSION_NOT_FULL, _LINE(_T)));          \
                                     *tokens = _NT;                                                              \
                                     return ret;
 
@@ -77,6 +81,10 @@ enum SyntaxError{
     NO_CLOSING_BRACKET      = 7,
     EXPRESSION_NOT_FULL     = 8,
     WRONG_FUNC_CALL         = 9,
+    WRONG_PROGRAMM          = 10,
+    WRONG_IF                = 11,
 };
+
+Node* parsing (const char* filename);
 
 #endif

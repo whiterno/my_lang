@@ -59,6 +59,8 @@ void addNewName(Nametable* nt, Identifier name, size_t line, bool init_state){
     nt->names[nt->size].index = nt->size;
     nt->names[nt->size].line  = line;
     nt->names[nt->size].is_init = init_state;
+
+    nt->size++;
 }
 
 size_t getIndex(Nametable* nt, Identifier name){
@@ -69,6 +71,8 @@ size_t getIndex(Nametable* nt, Identifier name){
             return nt->names[i].index;
         }
     }
+
+    return -1;
 }
 
 void resizeNametable(Nametable* nt){

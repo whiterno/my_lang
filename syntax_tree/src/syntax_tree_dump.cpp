@@ -109,12 +109,32 @@ static int printLabelColor(FILE* dump_dot, Node* node){
         }
         case(IDENTIFIER):{
             fprintf(dump_dot, "fillcolor = \"#FFFFE0\" ");
-            fprintf(dump_dot, "label = \"{%s ", node->value.name.id);
+            fprintf(dump_dot, "label = \"{IDENTIFIER: %ld", node->value.index);
             return NO_ERROR;
         }
         case(CONSTANT):{
             fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
             fprintf(dump_dot, "label = \"{%d ", node->value.number);
+            return NO_ERROR;
+        }
+        case(FUNCTION_DEFINITION):{
+            fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
+            fprintf(dump_dot, "label = \"{Func def: %ld ", node->value.index);
+            return NO_ERROR;
+        }
+        case(PARAMETERS):{
+            fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
+            fprintf(dump_dot, "label = \"{Params ");
+            return NO_ERROR;
+        }
+        case (VAR_DECLARATION):{
+            fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
+            fprintf(dump_dot, "label = \"{Var decl: %ld", node->value.index);
+            return NO_ERROR;
+        }
+        case(CALL):{
+            fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
+            fprintf(dump_dot, "label = \"{Call ");
             return NO_ERROR;
         }
         default:{
@@ -126,27 +146,17 @@ static int printLabelColor(FILE* dump_dot, Node* node){
     return NO_SUCH_NODE_TYPE;
 }
 
+#define _DEF_KWD(str_dummy, enumer, str) case(enumer): fprintf(dump_dot, "label = \"{KWD: %d %s ", enumer, str); break;
 static int printOperLabel(FILE* dump_dot, Node* node){
     fprintf(dump_dot, "fillcolor = \"#98FB9\" ");
+
+    printf("TYPE: %d\n", node->value.keyword_type);
+
     switch(node->value.keyword_type){
-        case(ADD):{
-            fprintf(dump_dot, "label = \"{ + "); break;
-        }
-        case(SUB):{
-            fprintf(dump_dot, "label = \"{ - "); break;
-        }
-        case(DIV):{
-            fprintf(dump_dot, "label = \"{ / "); break;
-        }
-        case(MULT):{
-            fprintf(dump_dot, "label = \"{ * "); break;
-        }
-        case(SIN):{
-            fprintf(dump_dot, "label = \"{ sin "); break;
-        }
-        case(COS):{
-            fprintf(dump_dot, "label = \"{ cos "); break;
-        }
+        #include "../../frontend/include/code_gen.h"
+
+        case(NUMBER): fprintf(dump_dot, "label = \"{KWD: 51 NUMBER "); break;
+
         default:{
             fprintf(dump_dot, "label = \"{ key "); break;
         }

@@ -66,11 +66,13 @@ static Token* getSymbolKeyword(char** prg_txt, char value[]){
             (*prg_txt)++;
             value[1] = **prg_txt;
             value[2] = '\0';
+            (*prg_txt)++;
 
             Keyword kwd_type = getKeywordType(value);
 
             if (kwd_type == NUMBER){
                 value[1] = '\0';
+                (*prg_txt)--;
             }
             else return _KEYWORD(kwd_type);
 
@@ -131,7 +133,7 @@ static bool isSymbol(char chr){
     return false;
 }
 
-#define _DEF_KWD(str, enumer)   if (strcmp(str, value) == 0) return enumer;
+#define _DEF_KWD(str, enumer, ...)   if (strcmp(str, value) == 0) return enumer;
 static Keyword getKeywordType(char value[]){
 
     #include "code_gen.h"
@@ -155,7 +157,17 @@ void printTokens(Token* head){
     }
 }
 
-#define _DEF_KWD(str, enum) case enum: printf(BLUE "KEYWORD" STOP ": %s, LINE: %ld\n", str, token->line); break;
+void printToken(Token* token){
+    if (token != NULL){
+        switch (token->token_type){
+            case TokenType::CONSTANT:      printf(MAGENTA "CONSTANT" STOP ": %d, LINE: %ld\n", token->value.number, token->line); break;
+            case TokenType::IDENTIFIER:    printf(GREEN "IDENTIFIER" STOP ": %s, LINE: %ld\n", token->value.name.id, token->line); break;
+            case TokenType::KEYWORD:       printKeywords(token); break;
+        }
+    }
+}
+
+#define _DEF_KWD(str, enum, ...) case enum: printf(BLUE "KEYWORD" STOP ": %s, LINE: %ld\n", str, token->line); break;
 static void printKeywords(Token* token){
     switch (token->value.keyword_type){
 
@@ -164,3 +176,4 @@ static void printKeywords(Token* token){
         default: printf("%d?\n", token->value.keyword_type);
     }
 }
+#undef _DEF_KWD
