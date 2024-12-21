@@ -11,6 +11,7 @@ _DEF_KWD("-", SUB)
 _DEF_KWD("*", MULT)
 _DEF_KWD("/", DIV)
 _DEF_KWD("sqrt", SQRT)
+_DEF_KWD("^", POW)
 
 _DEF_KWD("==", EQUAL)
 _DEF_KWD("<", LESS)

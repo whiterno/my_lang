@@ -7,7 +7,7 @@ const int MAX_LEXEM_LENGTH = 128;
 
 const char WHILE_STR[]          = "while";
 const char IF_STR[]             = "if";
-const char DECLARATION_STR[]    = "double";
+const char DECLARATION_STR[]    = "int";
 const char BREAK_STR[]          = "break";
 const char CONTINUE_STR[]       = "continue";
 const char RETURN_STR[]         = "return";

@@ -32,6 +32,7 @@ enum Keyword{
     MULT        = 26,
     DIV         = 27,
     SQRT        = 28,
+    POW         = 29,
 
     EQUAL       = 31,
     LESS        = 32,
@@ -68,7 +69,9 @@ struct Identifier{
 
 union NodeValue{
     Identifier      name;
-    double          number;
+    size_t          index;
+
+    int             number;
     Keyword         keyword_type;
 };
 

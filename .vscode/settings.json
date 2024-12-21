@@ -7,6 +7,8 @@
         "locale": "cpp",
         "ratio": "cpp",
         "tuple": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "__split_buffer": "cpp",
+        "string": "cpp"
     }
 }

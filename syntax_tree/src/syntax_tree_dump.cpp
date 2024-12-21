@@ -114,7 +114,7 @@ static int printLabelColor(FILE* dump_dot, Node* node){
         }
         case(CONSTANT):{
             fprintf(dump_dot, "fillcolor = \"#B0E0E6\" ");
-            fprintf(dump_dot, "label = \"{%lg ", node->value.number);
+            fprintf(dump_dot, "label = \"{%d ", node->value.number);
             return NO_ERROR;
         }
         default:{

@@ -1,10 +1,10 @@
 Programm        ::= Statement Programm | Statement ;
 Statement       ::= FuncDeclaration | VarDeclaration | Assignment | FuncCall ";" | IfStatement | WhileStatement |
-                    In ";" | Out ;
+                    In ";" | Out | ";";
 
 VarDeclaration  ::= Declaration Identifier [ "=" Expression | In ] ";"
 
-Assignment      ::= Identifier "=" Expression ";" ;
+Assignment      ::= Identifier "=" (Expression | In) ";" ;
 
 IfStatement     ::= If "(" Expression ")" "{" { Statement } "}" ;
 
@@ -29,13 +29,14 @@ Expression      ::= Priority5
 
 Priority5       ::= Priority4 { ( "and" | "or" ) Priority5 } ;
 Priority4       ::= Priority3 { ( "==" | "!=" | ">=" | "<=" | ">" | "<") Priority4} ;
-Priority3       ::= Priority2 { ( "+" | "-" ) Priority3 } ;
+Priority3       ::= Priority2 { { "+" | "-" } Priority3 } ;
 Priority2       ::= Priority1 { ( "*" | "/" ) Priority2 } ;
-Priority1       ::= "sin" "(" Priority5 ")" | "cos" "(" Priority5 ")" | "sqrt" "(" Priority5 ")" | Value ;
+Priority1       ::= Priority0 { "^" Priority1} ;
+Priority0       ::= "sin" "(" Priority5 ")" | "cos" "(" Priority5 ")" | "sqrt" "(" Priority5 ")" | "!" Value | Value ;
 Value           ::= "(" Priority5 ")" | Number | FuncCall | Identifier ;
 
 Identifier      ::= Character { Character | Digit } ;
-Number          ::= [ "-" ] Digit { Digit } [ "." { Digit } ] ;
+Number          ::= [ "-" ] Digit { Digit } ;
 
 Character       ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" |
                     "H" | "I" | "J" | "K" | "L" | "M" | "N" |

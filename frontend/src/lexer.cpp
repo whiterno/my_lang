@@ -26,7 +26,7 @@ Token* lexer(const char* filename){
 
     char* prg_txt = NULL;
     readFile(filename, &prg_txt);
-    char* prg_txt_full = prg_txt;
+    char* prg_txt_beg = prg_txt;
 
     Token* prg_tokens   = _KEYWORD(ABORT);
     Token* head         = prg_tokens;
@@ -43,6 +43,7 @@ Token* lexer(const char* filename){
         head                    = head->next;
     }
 
+    free(prg_txt_beg);
     return prg_tokens;
 }
 
@@ -87,28 +88,12 @@ static Token* getNumber(char** prg_txt, char value[]){
             if (isdigit(**prg_txt)){
                 value[i] = **prg_txt;
                 (*prg_txt)++;
+                continue;
             }
-
-            if (**prg_txt == '.'){
-                value[i + 1] = '.';
-                (*prg_txt)++;
-
-                for (size_t j = i + 2; j < MAX_LEXEM_LENGTH - 1; j++){
-                    if (isdigit(**prg_txt)){
-                        value[j] = **prg_txt;
-                        (*prg_txt)++;
-                    }
-                    else {
-                        value[j] = '\0';
-                    }
-                }
-                break;
-            }
-
-            // return syntax error cause what the fuck are you reading?!
+            value[i] = '\0';
         }
 
-        return _NUM(atof(value));
+        return _NUM(atoll(value));
     }
 
     return NULL;
@@ -162,7 +147,7 @@ void printTokens(Token* head){
 
     while (head != NULL){
         switch (head->token_type){
-            case Tkn::CONSTANT:      printf("CONSTANT: %lg, LINE: %ld\n", head->value.number, head->line); break;
+            case Tkn::CONSTANT:      printf("CONSTANT: %d, LINE: %ld\n", head->value.number, head->line); break;
             case Tkn::IDENTIFIER:    printf("IDENTIFIER: %s, LINE: %ld\n", head->value.name.id, head->line); break;
             case Tkn::KEYWORD:       printKeywords(head); break;
         }
