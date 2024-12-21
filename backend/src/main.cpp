@@ -8,9 +8,11 @@ int main(){
     SyntaxTree* tree = NULL;
     syntaxTreeCtor(&tree INIT_BET(tree));
 
-    printf("here\n");
-
     tree->root = readTree("../frontend/tree.txt");
 
-    generateCode(tree->root);
+    syntaxTreeDump(DUMP_BET(tree), 0);
+
+    FILE* asm_code = fopen("code.asm", "w");
+    generateCode(tree->root, asm_code);
+    fclose(asm_code);
 }

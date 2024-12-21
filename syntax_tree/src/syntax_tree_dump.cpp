@@ -150,8 +150,6 @@ static int printLabelColor(FILE* dump_dot, Node* node){
 static int printOperLabel(FILE* dump_dot, Node* node){
     fprintf(dump_dot, "fillcolor = \"#98FB9\" ");
 
-    printf("TYPE: %d\n", node->value.keyword_type);
-
     switch(node->value.keyword_type){
         #include "../../frontend/include/code_gen.h"
 

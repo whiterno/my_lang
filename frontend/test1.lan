@@ -1,3 +1,9 @@
-int f(int a){
-    return 1;
-}
+//int Function(int a, int b, int myau){
+//    int Finc(int c, int d){
+//        int x = 5 + 10 * 3 - 16 + sqrt(3);
+//        int z = 5 + 10 * 3 - 16 + sqrt(3);
+//    }
+//}
+
+int a = 2 + 2 * 5 + sqrt(6);
+print(a);

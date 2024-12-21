@@ -51,7 +51,7 @@ Node* parsing (const char* filename){
     Nametable* nt = nametableCtor();
     Token* tokens = lexer(filename);
 
-    printTokens(tokens);
+    // printTokens(tokens);
 
     Node* root = getProgramm(&tokens->next, nt);
 

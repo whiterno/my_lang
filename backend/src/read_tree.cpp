@@ -13,8 +13,6 @@ Node* readTree(const char* filename){
     char* tree_txt  = NULL;
     readFile(filename, &tree_txt);
 
-    printf("%s\n", tree_txt);
-
     char* old_ptr   = tree_txt;
     Node* root      = buildTree(&tree_txt);
     free(old_ptr);
@@ -24,23 +22,15 @@ Node* readTree(const char* filename){
 
 static Node* buildTree(char** tree_txt){
     if (**tree_txt == '_'){
-        (*tree_txt) += 2;
-
         return NULL;
     }
-    if (**tree_txt == '(' || **tree_txt == ')') (*tree_txt) += 2;
-    if (**tree_txt == '_'){
-        (*tree_txt) += 2;
 
-        return NULL;
-    }
+    (*tree_txt) += 2;
 
     NodeType type = CONSTANT;
     int shift  = 0;
 
     sscanf(*tree_txt, "%d %n", &type, &shift);
-
-    printf("tp: %d\n", type);
 
     (*tree_txt) += shift;
 
@@ -48,15 +38,15 @@ static Node* buildTree(char** tree_txt){
     readValues(tree_txt, node);
 
     node->left  = buildTree(tree_txt);
+    (*tree_txt) += 2;
     node->right = buildTree(tree_txt);
+    (*tree_txt) += 2;
 
     return node;
 }
 
 static void readValues(char** tree_txt, Node* node){
     int shift = 0;
-
-    printf("type: %d\n", node->type);
 
     switch (node->type){
     case (CONSTANT):{
@@ -71,7 +61,6 @@ static void readValues(char** tree_txt, Node* node){
     }
     case(KEYWORD):{
         sscanf(*tree_txt, "%d %n", &node->value.keyword_type, &shift);
-        printf("shift: %d\n", shift);
         (*tree_txt) += shift;
         break;
     }
