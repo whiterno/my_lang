@@ -1,1 +1,3 @@
-print(5);
+int f(int a){
+    return 1;
+}

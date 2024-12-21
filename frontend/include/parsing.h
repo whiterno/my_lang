@@ -31,6 +31,9 @@
                                                 _TYPE_T(_NNT) == TokenType::KEYWORD && _KWD_T(_NNT) == BRACKET_CL)) __VA_ARGS__;
 #define _CHECK_OUTPUT_TEMP(...)          if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == OUT &&                     \
                                                 _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
+#define _CHECK_CONTINUE_TEMP(...)        if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == CONTINUE)) __VA_ARGS__;
+#define _CHECK_BREAK_TEMP(...)           if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BREAK)) __VA_ARGS__;
+#define _CHECK_RETURN_TEMP(...)          if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == RETURN)) __VA_ARGS__;
 #define _CHECK_SEMICOLON(...)            if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == SEMICOLON)) __VA_ARGS__;
 #define _CHECK_OPEN_BRACKET(...)         if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_CLOSE_BRACKET(...)        if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL)) __VA_ARGS__;
@@ -78,6 +81,9 @@
 #define _OR(node_l, node_r)         createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = OR})
 #define _IN                         createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = IN})
 #define _OUT(node)                  createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = OUT})
+#define _CONTINUE                   createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = CONTINUE})
+#define _BREAK                      createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = BREAK})
+#define _RETURN(node)               createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = RETURN})
 
 enum SyntaxError{
     DOUBLE_INITIALIZATION   = 1,

@@ -23,6 +23,9 @@ static Node* getIf(Token** tokens, Nametable* nt);
 static Node* getWhile(Token** tokens, Nametable* nt);
 static Node* getIn(Token** tokens, Nametable* nt);
 static Node* getOut(Token** tokens, Nametable* nt);
+static Node* getBreak(Token** tokens, Nametable* nt);
+static Node* getContinue(Token** tokens, Nametable* nt);
+static Node* getReturn(Token** tokens, Nametable* nt);
 
 static Node* getExpression(Token** tokens, Nametable* nt);
 static Node* getPriority5(Token** tokens, Nametable* nt);
@@ -80,6 +83,16 @@ static Node* getStatement(Token** tokens, Nametable* nt){
     if ((statement_node = getWhile(tokens, nt)))                 return statement_node;
     if ((statement_node = getIn(tokens, nt)))                    return statement_node;
     if ((statement_node = getOut(tokens, nt)))                   return statement_node;
+
+    if (scope_cnt > 0){
+        if ((statement_node = getContinue(tokens, nt)))          return statement_node;
+        if ((statement_node = getBreak(tokens, nt)))             return statement_node;
+    }
+    if (func_cnt > 0){
+        if ((statement_node = getReturn(tokens, nt)))            return statement_node;
+    }
+
+    syntaxError(WRONG_PROGRAMM, _LINE(_T));
 
     return NULL;
 }
@@ -257,6 +270,44 @@ static Node* getOut(Token** tokens, Nametable* nt){
     *tokens     = _NT;
 
     return _OUT(expr);
+}
+
+static Node* getContinue(Token** tokens, Nametable* nt){
+    _CHECK_CONTINUE_TEMP(return NULL);
+
+    *tokens = _NT;
+
+    _CHECK_SEMICOLON(syntaxError(NO_SEMICOLON, _LINE(_T)));
+
+    *tokens = _NT;
+
+    return _CONTINUE;
+}
+
+static Node* getBreak(Token** tokens, Nametable* nt){
+    _CHECK_BREAK_TEMP(return NULL);
+
+    *tokens = _NT;
+
+    _CHECK_SEMICOLON(syntaxError(NO_SEMICOLON, _LINE(_T)));
+
+    *tokens = _NT;
+
+    return _BREAK;
+}
+
+static Node* getReturn(Token** tokens, Nametable* nt){
+    _CHECK_RETURN_TEMP(return NULL);
+
+    *tokens = _NT;
+
+    Node* expr = getExpression(tokens, nt);
+
+    _CHECK_SEMICOLON(syntaxError(NO_SEMICOLON, _LINE(_T)));
+
+    *tokens = _NT;
+
+    return _RETURN(expr);
 }
 
 static Node* getExpression(Token** tokens, Nametable* nt){
