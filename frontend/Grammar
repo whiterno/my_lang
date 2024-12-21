@@ -33,7 +33,7 @@ Priority3       ::= Priority2 [ { "+" | "-" } Priority3 ] ;
 Priority2       ::= Priority1 [ ( "*" | "/" ) Priority2 ] ;
 Priority1       ::= Priority0 [ "^" Priority1] ;
 Priority0       ::= "sin" "(" Priority5 ")" | "cos" "(" Priority5 ")" | "sqrt" "(" Priority5 ")" | "!" Value | Value ;
-Value           ::= "(" Priority5 ")" | "(" "-" Number ")" | Number | FuncCall | Identifier ;
+Value           ::= "(" Priority5 ")" | "(" "-" Number ")" | In | Number | FuncCall | Identifier ;
 
 Identifier      ::= Character { Character | Digit } ;
 Number          ::= Digit { Digit } ;

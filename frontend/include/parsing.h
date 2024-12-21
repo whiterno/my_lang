@@ -25,6 +25,12 @@
 #define _CHECK_FUNCCALL_TEMP(...)        if (! (_TYPE_T(_T) == TokenType::IDENTIFIER && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_ASIGN_TEMP(...)           if (! (_TYPE_T(_T) == TokenType::IDENTIFIER && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == ASSIGN)) __VA_ARGS__;
 #define _CHECK_IF_TEMP(...)              if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == IF && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
+#define _CHECK_WHILE_TEMP(...)           if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == WHILE && _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
+#define _CHECK_INPUT_TEMP(...)           if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == IN &&                      \
+                                                _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP &&            \
+                                                _TYPE_T(_NNT) == TokenType::KEYWORD && _KWD_T(_NNT) == BRACKET_CL)) __VA_ARGS__;
+#define _CHECK_OUTPUT_TEMP(...)          if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == OUT &&                     \
+                                                _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_SEMICOLON(...)            if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == SEMICOLON)) __VA_ARGS__;
 #define _CHECK_OPEN_BRACKET(...)         if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_OP)) __VA_ARGS__;
 #define _CHECK_CLOSE_BRACKET(...)        if (! (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL)) __VA_ARGS__;
@@ -52,10 +58,10 @@
                                         return _##oper(priority##num1##_node, getPriority##num2(tokens, nt));   \
                                         }
 
-#define _SIN(node)                  createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = SIN})
-#define _COS(node)                  createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = COS})
-#define _SQRT(node)                 createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = SQRT})
-#define _NOT(node)                  createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = NOT})
+#define _SIN(node)                  createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = SIN})
+#define _COS(node)                  createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = COS})
+#define _SQRT(node)                 createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = SQRT})
+#define _NOT(node)                  createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = NOT})
 #define _POW(node_l, node_r)        createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = POW})
 #define _MULT(node_l, node_r)       createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = MULT})
 #define _DIV(node_l, node_r)        createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = DIV})
@@ -70,6 +76,8 @@
 #define _N_EQ(node_l, node_r)       createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = N_EQ})
 #define _AND(node_l, node_r)        createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = AND})
 #define _OR(node_l, node_r)         createNode(node_l, node_r, KEYWORD, (NodeValue){.keyword_type = OR})
+#define _IN                         createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = IN})
+#define _OUT(node)                  createNode(node, NULL, KEYWORD, (NodeValue){.keyword_type = OUT})
 
 enum SyntaxError{
     DOUBLE_INITIALIZATION   = 1,
@@ -83,6 +91,8 @@ enum SyntaxError{
     WRONG_FUNC_CALL         = 9,
     WRONG_PROGRAMM          = 10,
     WRONG_IF                = 11,
+    WRONG_WHILE             = 12,
+    NO_OUTPUT               = 13,
 };
 
 Node* parsing (const char* filename);

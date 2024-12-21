@@ -20,6 +20,9 @@ static Node* getParameters(Token** tokens, Nametable* nt);
 static Node* getFuncCall(Token** tokens, Nametable* nt);
 static Node* getAssignment(Token** tokens, Nametable* nt);
 static Node* getIf(Token** tokens, Nametable* nt);
+static Node* getWhile(Token** tokens, Nametable* nt);
+static Node* getIn(Token** tokens, Nametable* nt);
+static Node* getOut(Token** tokens, Nametable* nt);
 
 static Node* getExpression(Token** tokens, Nametable* nt);
 static Node* getPriority5(Token** tokens, Nametable* nt);
@@ -49,9 +52,6 @@ Node* parsing (const char* filename){
 
     Node* root = getProgramm(&tokens->next, nt);
 
-    printf("size: %ld\n", nt->size);
-    printf("name[0]: *%s* \n", nt->names[0].name.id);
-
     return root;
 }
 
@@ -77,6 +77,9 @@ static Node* getStatement(Token** tokens, Nametable* nt){
         }
     if ((statement_node = getAssignment(tokens, nt)))            return statement_node;
     if ((statement_node = getIf(tokens, nt)))                    return statement_node;
+    if ((statement_node = getWhile(tokens, nt)))                 return statement_node;
+    if ((statement_node = getIn(tokens, nt)))                    return statement_node;
+    if ((statement_node = getOut(tokens, nt)))                   return statement_node;
 
     return NULL;
 }
@@ -95,14 +98,16 @@ static Node* getFuncDeclaration(Token** tokens, Nametable* nt){
     Token* func_ident = _NT;
     *tokens = _NNT;
 
-    Node* params_tree       = getParameters(tokens, nt);
+    Node* params_tree = getParameters(tokens, nt);
     _CHECK_CLOSE_BRACKET(syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T)));
     *tokens = _NT;
     _CHECK_OPEN_BRACE(syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T)));
     *tokens = _NT;
 
-    Node* func_body         = getProgramm(tokens, nt);
-    Node* parameters_node   = createNode(params_tree, func_body, PARAMETERS, DUMMY);
+    func_cnt++;
+    Node* func_body       = getProgramm(tokens, nt);
+    func_cnt--;
+    Node* parameters_node = createNode(params_tree, func_body, PARAMETERS, DUMMY);
 
 
     _CHECK_CLOSE_BRACE(syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T)));
@@ -130,8 +135,8 @@ static Node* getParameters(Token** tokens, Nametable* nt){
     _R(var_node)    = _IDENT_N(_NT);
     *tokens         = _NNT;
 
-    _L(comma)       = getParameters(tokens, nt);
-    _R(comma)       = var_node;
+    _R(comma)       = getParameters(tokens, nt);
+    _L(comma)       = var_node;
 
     return comma;
 }
@@ -186,21 +191,72 @@ static Node* getAssignment(Token** tokens, Nametable* nt){
 static Node* getIf(Token** tokens, Nametable* nt){
     _CHECK_IF_TEMP(return NULL);
 
-    Node* if_node = _KWD_N(IF);
-    *tokens = _NNT;
+    Node* if_node   = _KWD_N(IF);
+    *tokens         = _NNT;
 
-    _L(if_node) = getExpression(tokens, nt);
+    _L(if_node)     = getExpression(tokens, nt);
 
     _CHECK_CLOSE_BRACKET(syntaxError(WRONG_IF, _LINE(_T)));
-    *tokens     = _NT;
+    *tokens         = _NT;
     _CHECK_OPEN_BRACE(syntaxError(WRONG_IF, _LINE(_T)));
-    *tokens     = _NT;
+    *tokens         = _NT;
 
-    _R(if_node) = getProgramm(tokens, nt);
+    _R(if_node)     = getProgramm(tokens, nt);
     _CHECK_CLOSE_BRACE(syntaxError(WRONG_IF, _LINE(_T)));
-    *tokens     = _NT;
+    *tokens         = _NT;
 
     return if_node;
+}
+
+static Node* getWhile(Token** tokens, Nametable* nt){
+    _CHECK_WHILE_TEMP(return NULL);
+
+    Node* while_node    = _KWD_N(WHILE);
+    *tokens             = _NNT;
+
+    _L(while_node)      = getExpression(tokens, nt);
+
+    _CHECK_CLOSE_BRACKET(syntaxError(WRONG_WHILE, _LINE(_T)));
+    *tokens             = _NT;
+    _CHECK_OPEN_BRACE(syntaxError(WRONG_WHILE, _LINE(_T)));
+    *tokens             = _NT;
+
+    scope_cnt++;
+    _R(while_node)         = getProgramm(tokens, nt);
+    scope_cnt--;
+    _CHECK_CLOSE_BRACE(syntaxError(WRONG_WHILE, _LINE(_T)));
+    *tokens             = _NT;
+
+    return while_node;
+}
+
+static Node* getIn(Token** tokens, Nametable* nt){
+    _CHECK_INPUT_TEMP(return NULL);
+
+    *tokens = _NNT;
+    *tokens = _NT;
+
+    _CHECK_SEMICOLON(syntaxError(NO_SEMICOLON, _LINE(_T)));
+
+    return _IN;
+}
+
+static Node* getOut(Token** tokens, Nametable* nt){
+    _CHECK_OUTPUT_TEMP(return NULL);
+
+    *tokens     = _NNT;
+
+    if (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL) syntaxError(NO_OUTPUT, _LINE(_T));
+
+    Node* expr  = getExpression(tokens, nt);
+
+    _CHECK_CLOSE_BRACKET(syntaxError(NO_CLOSING_BRACKET, _LINE(_T)));
+    *tokens     = _NT;
+
+    _CHECK_SEMICOLON(syntaxError(NO_SEMICOLON, _LINE(_T)));
+    *tokens     = _NT;
+
+    return _OUT(expr);
 }
 
 static Node* getExpression(Token** tokens, Nametable* nt){
@@ -288,6 +344,10 @@ static Node* getPriority0(Token** tokens, Nametable* nt){
 
 static Node* getValue(Token** tokens, Nametable* nt){
     if (_TYPE_T(_T) == TokenType::KEYWORD){
+        if (_KWD_T(_T) == IN){
+            return getIn(tokens, nt);
+        }
+
         _CHECK_OPEN_BRACKET(syntaxError(EXPRESSION_NOT_FULL, _LINE(_T)));
 
         if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == SUB){
@@ -312,7 +372,7 @@ static Node* getValue(Token** tokens, Nametable* nt){
         return getNumber(tokens, nt);
     }
     if (_TYPE_T(_T) == TokenType::IDENTIFIER){
-        if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACE_OP){
+        if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP){
             Node* ret = getFuncCall(tokens, nt);
             if (ret == NULL) syntaxError(WRONG_FUNC_CALL, _LINE(_T));
 
@@ -340,7 +400,7 @@ static Node* getNumber(Token** tokens, Nametable* nt){
 }
 
 static Node* getFuncCall(Token** tokens, Nametable* nt){
-    _CHECK_FUNC_DECL_TEMP(return NULL);
+    _CHECK_FUNCCALL_TEMP(return NULL);
 
     if (!(isNameInNametable(nt, _IDENT_T(_T)))) addNewName(nt, _IDENT_T(_T), _LINE(_T), false);
 
@@ -352,7 +412,7 @@ static Node* getFuncCall(Token** tokens, Nametable* nt){
 }
 
 static Node* getArguments(Token** tokens, Nametable* nt){
-    if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_OP){
+    if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_CL){
         *tokens = _NNT;
 
         return NULL;
@@ -363,16 +423,17 @@ static Node* getArguments(Token** tokens, Nametable* nt){
         return NULL;
     }
 
-    if (!(_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == COMMA)) syntaxError(WRONG_FUNC_CALL, _LINE(_T));
+    if (!(_TYPE_T(_T) == TokenType::KEYWORD &&
+         (_KWD_T(_T) == COMMA || _KWD_T(_T) == BRACKET_OP))) syntaxError(WRONG_FUNC_CALL, _LINE(_T));
 
     Node* comma = createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = COMMA});
 
-    if (!(isNameInNametable(nt, _IDENT_T(_NT)))) syntaxError(NO_IDENT_IN_NAMETABLE, _LINE(_T));
-
+    if (!(isNameInNametable(nt, _IDENT_T(_NT)))) syntaxError(NO_IDENT_IN_NAMETABLE, _LINE(_NT));
     *tokens     = _NT;
+
     Node* arg   = getArg(tokens, nt);
-    _R(comma)   = arg;
-    _L(comma)   = getArguments(tokens, nt);
+    _L(comma)   = arg;
+    _R(comma)   = getArguments(tokens, nt);
 
     return comma;
 }
@@ -384,9 +445,9 @@ static Node* getArg(Token** tokens, Nametable* nt){
 }
 
 static void syntaxError(SyntaxError err, size_t line){
-    printf("\033[31;1;4mLINE %ld:ERROR:\033[0m %s\n", line, errString(err));
+    printf("\033[31;1;4m LINE %ld:ERROR: \033[0m %s\n", line, errString(err));
 
-    abort();
+    exit(-1);
 }
 
 #define _DESCR(err) case err: return #err;
@@ -403,5 +464,7 @@ static const char* errString(SyntaxError err){
         _DESCR(WRONG_FUNC_CALL);
         _DESCR(WRONG_PROGRAMM);
         _DESCR(WRONG_IF);
+        _DESCR(WRONG_WHILE);
+        _DESCR(NO_OUTPUT);
     }
 }
