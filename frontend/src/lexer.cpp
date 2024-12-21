@@ -93,7 +93,7 @@ static Token* getNumber(char** prg_txt, char value[]){
             value[i] = '\0';
         }
 
-        return _NUM(atoll(value));
+        return _NUM(atoi(value));
     }
 
     return NULL;
@@ -147,15 +147,15 @@ void printTokens(Token* head){
 
     while (head != NULL){
         switch (head->token_type){
-            case Tkn::CONSTANT:      printf("CONSTANT: %d, LINE: %ld\n", head->value.number, head->line); break;
-            case Tkn::IDENTIFIER:    printf("IDENTIFIER: %s, LINE: %ld\n", head->value.name.id, head->line); break;
-            case Tkn::KEYWORD:       printKeywords(head); break;
+            case TokenType::CONSTANT:      printf(MAGENTA "CONSTANT" STOP ": %d, LINE: %ld\n", head->value.number, head->line); break;
+            case TokenType::IDENTIFIER:    printf(GREEN "IDENTIFIER" STOP ": %s, LINE: %ld\n", head->value.name.id, head->line); break;
+            case TokenType::KEYWORD:       printKeywords(head); break;
         }
         head = head->next;
     }
 }
 
-#define _DEF_KWD(str, enum) case enum: printf("KEYWORD: %s, LINE: %ld\n", str, token->line); break;
+#define _DEF_KWD(str, enum) case enum: printf(BLUE "KEYWORD" STOP ": %s, LINE: %ld\n", str, token->line); break;
 static void printKeywords(Token* token){
     switch (token->value.keyword_type){
 

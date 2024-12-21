@@ -18,7 +18,7 @@ Arguments       ::= [ Identifier { "," Arguments } ] ;
 
 If              ::= "if" ;
 While           ::= "while" ;
-Declaration     ::= "double" ;
+Declaration     ::= "int" ;
 Break           ::= "break" ";" ;
 Continue        ::= "continue" ";" ;
 In              ::= "input()" ;

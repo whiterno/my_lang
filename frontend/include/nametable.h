@@ -8,6 +8,7 @@ const size_t BASIC_NAMETABLE_CAPACITY = 4;
 struct Name{
     Identifier  name;
     size_t      index;
+    size_t      line;
     bool        is_init;
 };
 
@@ -21,7 +22,7 @@ Nametable* nametableCtor();
 bool isNameInNametable(Nametable* nt, Identifier name);
 bool isInit(Nametable* nt, Identifier name);
 void initName(Nametable* nt, Identifier name);
-void addNewName(Nametable* nt, Identifier name, bool init_state);
+void addNewName(Nametable* nt, Identifier name, size_t line, bool init_state);
 size_t getIndex(Nametable* nt, Identifier name);
 void resizeNametable(Nametable* nt);
 

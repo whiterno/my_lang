@@ -48,7 +48,7 @@ void initName(Nametable* nt, Identifier name){
     }
 }
 
-void addNewName(Nametable* nt, Identifier name, bool init_state){
+void addNewName(Nametable* nt, Identifier name, size_t line, bool init_state){
     assert(nt);
 
     if (nt->size == nt->capacity){
@@ -57,6 +57,7 @@ void addNewName(Nametable* nt, Identifier name, bool init_state){
 
     memcpy(&nt->names[nt->size].name, &name, sizeof(Identifier));
     nt->names[nt->size].index = nt->size;
+    nt->names[nt->size].line  = line;
     nt->names[nt->size].is_init = init_state;
 }
 
