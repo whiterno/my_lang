@@ -1,9 +1,48 @@
-//int Function(int a, int b, int myau){
-//    int Finc(int c, int d){
-//        int x = 5 + 10 * 3 - 16 + sqrt(3);
-//        int z = 5 + 10 * 3 - 16 + sqrt(3);
-//    }
-//}
+// Example 1
+//
+// int a = 1;
+// int b = 2;
+//
+// int c = a + b;
+//
+// print(c);
+//
 
-int a = 1 * 2 * 3 * 4 * 5;
-print(a);
+// Example 2
+//
+// int a = input();
+// int b = input();
+//
+// int c = a * b;
+//
+// print(c);
+//
+
+// Example 3
+//
+// int a = 10;
+// int b = 5;
+//
+// if (a > b){
+//    print(a);
+// }
+// if (a < b){
+//    print(b);
+// }
+//
+
+
+// Example 4
+//
+// int a = 1;
+// int b = 1;
+// int c = 2;
+//
+// while (b < 10){
+//     a = a * b;
+//     b = b + 1;
+//     c = (c + 12) * 10 - 125 / 3;
+// }
+//
+// print(a);
+// print(c);

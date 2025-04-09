@@ -11,6 +11,7 @@
 
 #define _R(node)        node->right
 #define _L(node)        node->left
+#define _P(node)        node->parent
 
 void generateCode(Node* root, FILE* asm_code);
 

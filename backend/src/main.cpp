@@ -12,6 +12,8 @@ int main(){
 
     syntaxTreeDump(DUMP_BET(tree), 0);
 
+    makeParents(tree->root, NULL);
+
     FILE* asm_code = fopen("code.asm", "w");
     generateCode(tree->root, asm_code);
     fclose(asm_code);

@@ -112,6 +112,7 @@ static Node* getFuncDeclaration(Token** tokens, Nametable* nt){
     *tokens = _NNT;
 
     Node* params_tree = getParameters(tokens, nt);
+    if (_TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_CL) *tokens = _NT;
     _CHECK_CLOSE_BRACKET(syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T)));
     *tokens = _NT;
     _CHECK_OPEN_BRACE(syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T)));
@@ -133,7 +134,8 @@ static Node* getFuncDeclaration(Token** tokens, Nametable* nt){
 static Node* getParameters(Token** tokens, Nametable* nt){
     if (_NT == NULL || _NNT == NULL) syntaxError(WRONG_FUNC_DECLARATION, _LINE(_T));
 
-    if (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL) return NULL;
+    if (_TYPE_T(_T) == TokenType::KEYWORD && _KWD_T(_T) == BRACKET_CL ||
+        _TYPE_T(_NT) == TokenType::KEYWORD && _KWD_T(_NT) == BRACKET_CL) return NULL;
     Node* comma = createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = COMMA});
 
     *tokens = _NT;
