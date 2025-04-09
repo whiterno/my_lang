@@ -1,0 +1,8 @@
+backend/backend.out
+backend/obj
+.DS_Store
+.vscode
+frontend/frontend.out
+frontend/obj
+syntax_tree/obj
+utils/obj
