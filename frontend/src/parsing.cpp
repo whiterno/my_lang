@@ -481,7 +481,6 @@ static Node* getArguments(Token** tokens, Nametable* nt){
 
     Node* comma = createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = COMMA});
 
-    if (!(isNameInNametable(nt, _IDENT_T(_NT)))) syntaxError(NO_IDENT_IN_NAMETABLE, _LINE(_NT));
     *tokens     = _NT;
 
     Node* arg   = getArg(tokens, nt);

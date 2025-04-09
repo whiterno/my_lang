@@ -43,6 +43,8 @@ Token* lexer(const char* filename){
         head                    = head->next;
     }
 
+    printTokens(prg_tokens);
+
     free(prg_txt_beg);
     return prg_tokens;
 }
