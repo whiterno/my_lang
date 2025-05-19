@@ -1,4 +1,0 @@
-PUSH 0
-POP [0]
-PUSH 0
-POP [0]

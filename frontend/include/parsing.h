@@ -85,6 +85,8 @@
 #define _BREAK                      createNode(NULL, NULL, KEYWORD, (NodeValue){.keyword_type = BREAK})
 #define _RETURN(node)               createNode(NULL, node, KEYWORD, (NodeValue){.keyword_type = RETURN})
 
+#define CHILD_NT(nt)                nametableCtor(nt)
+
 enum SyntaxError{
     DOUBLE_INITIALIZATION   = 1,
     WRONG_FUNC_DECLARATION  = 2,

@@ -1,48 +1,15 @@
-// Example 1
-//
-// int a = 1;
-// int b = 2;
-//
-// int c = a + b;
-//
-// print(c);
-//
+int main(){
+    int n = 5;
 
-// Example 2
-//
-// int a = input();
-// int b = input();
-//
-// int c = a * b;
-//
-// print(c);
-//
+    fact(n);
 
-// Example 3
-//
-// int a = 10;
-// int b = 5;
-//
-// if (a > b){
-//    print(a);
-// }
-// if (a < b){
-//    print(b);
-// }
-//
+    return 0;
+}
 
+int fact(int n){
+    if (n == 0){
+        return 1;
+    }
 
-// Example 4
-//
-// int a = 1;
-// int b = 1;
-// int c = 2;
-//
-// while (b < 10){
-//     a = a * b;
-//     b = b + 1;
-//     c = (c + 12) * 10 - 125 / 3;
-// }
-//
-// print(a);
-// print(c);
+    return n * fact(n - 1);
+}
