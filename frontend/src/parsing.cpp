@@ -45,7 +45,7 @@ static Node* getArg(Token** tokens, Nametable* nt);
 static void syntaxError(SyntaxError err, size_t line);
 static const char* errString(SyntaxError err);
 
-Node* parsing (const char* filename){
+Node* parsing(const char* filename){
     assert(filename);
 
     Nametable* nt = nametableCtor(NULL);
@@ -188,7 +188,7 @@ static Node* getVarDeclaration(Token** tokens, Nametable* nt){
 static Node* getAssignment(Token** tokens, Nametable* nt){
     _CHECK_ASIGN_TEMP(return NULL);
 
-    if (! (isNameInNametable(nt, _IDENT_T(_T)))) syntaxError(NO_IDENT_IN_NAMETABLE, _LINE(_T));
+    if (getIndex(nt, _IDENT_T(_T)) == -1) syntaxError(NO_IDENT_IN_NAMETABLE, _LINE(_T));
 
     Node* assign    = _KWD_N(ASSIGN);
     _L(assign)      = _IDENT_N(_T);

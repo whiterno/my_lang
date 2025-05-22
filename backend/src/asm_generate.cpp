@@ -4,6 +4,7 @@
 
 #include "syntax_tree.h"
 
+static void generateProgramm(Node* node, FILE* asm_code);
 static void generateVarDecl(Node* node, FILE* asm_code);
 static void generateKeywords(Node* node, FILE* asm_code);
 static void generateExp(Node* node, FILE* asm_code);
@@ -18,9 +19,19 @@ static int label_inx = 0;
 void generateCode(Node* node, FILE* asm_code){
     if (node == NULL) return;
 
+    // generateGlobals(node, asm_code);
+    // generateFuncs(node, asm_code);
+}
+
+static void generateGlobals(Node* node, FILE* asm_code){
+}
+
+static void generateProgramm(Node* node, FILE* asm_code){
+    if (node == NULL) return;
+
     if (_TYPE(node) == KEYWORD && _KWD(node) == SEMICOLON){
-        generateCode(_L(node), asm_code);
-        generateCode(_R(node), asm_code);
+        generateProgramm(_L(node), asm_code);
+        generateProgramm(_R(node), asm_code);
 
         return;
     }
@@ -90,7 +101,7 @@ static void generateWhile(Node* node, FILE* asm_code, int inx){
 
     printJmp(_KWD(node), asm_code, inx);
 
-    generateCode(_R(_P(node)), asm_code);
+    generateProgramm(_R(_P(node)), asm_code);
 
     fprintf(asm_code, "JMP BEGIN%d:\n", inx);
     fprintf(asm_code, "L%d:\n", inx);
@@ -102,7 +113,7 @@ static void generateIf(Node* node, FILE* asm_code, int inx){
 
     printJmp(_KWD(node), asm_code, inx);
 
-    generateCode(_R(_P(node)), asm_code);
+    generateProgramm(_R(_P(node)), asm_code);
 
     fprintf(asm_code, "L%d:\n", inx);
 }
